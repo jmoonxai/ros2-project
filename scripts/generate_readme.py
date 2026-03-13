@@ -102,14 +102,14 @@ def generate_projects_section():
     return "\n".join(lines).strip()
 
 def replace_section(content, start_marker, end_marker, new_body):
-    pattern = re.compile(
-        rf"({re.escape(start_marker)}\n)(.*?)(\n{re.escape(end_marker)})",
-        re.DOTALL
-    )
-    replacement = rf"\1{new_body}\3"
-    if pattern.search(content):
-        return pattern.sub(replacement, content)
-    return content
+    start = content.find(start_marker)
+    end = content.find(end_marker)
+
+    if start == -1 or end == -1 or start > end:
+        return content
+
+    start += len(start_marker)
+    return content[:start] + "\n" + new_body + "\n" + content[end:]
 
 def main():
     if not README_PATH.exists():
@@ -148,3 +148,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print("STRUCTURE BODY:")
+    print(structure_body)
+    print("PROJECTS BODY:")
+    print(projects_body)
