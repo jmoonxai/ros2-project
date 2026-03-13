@@ -10,6 +10,8 @@
 
 
 
+
+
 ## 프로젝트 A — 거북이 키보드 조종기
 
 **▸ 한 줄 설명**
@@ -18,11 +20,15 @@
 
 
 
+
+
 **▸ 핵심 학습 포인트**
 
 - `create_publisher()` + `create_timer()` 패턴 복습
 - Python `input()` 또는 `sys.stdin`으로 키 입력 처리
 - `Twist` 메시지의 `linear.x` / `angular.z` 필드 제어
+
+
 
 
 
@@ -38,7 +44,12 @@
 | `d` | 0.0 | -2.0 | 우회전 |
 | 그 외 | 0.0 | 0.0 | 정지 |
 
+
+
+
 **Step 2. 노드 코드 작성**
+
+
 
 
 **Step 3. `setup.py` entry_points 추가**
@@ -46,6 +57,8 @@
 ```python
 'turtle_teleop = my_first_package.turtle_teleop:main',
 ```
+
+
 
 **Step 4. 빌드 & 실행**
 
