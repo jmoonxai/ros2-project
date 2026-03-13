@@ -1,7 +1,7 @@
 import os
 
 # Path to the beginner folder
-directory = 'beginner'
+directory = 'ros2-project'
 
 # Initialize a list to hold project details
 projects = []
