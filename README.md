@@ -4,7 +4,7 @@
 
 # 🟢 프로젝트 입문
 
-> [!summary] 목표
+> 목표
 > 섹션 1에서 배운 Publisher / Subscriber 패턴을 각각 독립 프로젝트로 완성한다.
 > 새로운 개념 없이 배운 것만으로 끝낼 수 있는 프로젝트 2개.
 
@@ -26,18 +26,6 @@
 
 ---
 
-**▸ 패키지 구조**
-
-```
-my_first_package/
-└── my_first_package/
-    ├── my_first_node.py
-    ├── my_subscriber.py
-    ├── my_publisher.py
-    └── turtle_teleop.py      ← 새로 만들 파일
-```
-
----
 
 **▸ 구현 단계**
 
@@ -53,47 +41,6 @@ my_first_package/
 
 **Step 2. 노드 코드 작성**
 
-```python
-import rclpy as rp
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
-import sys, select, termios, tty
-
-class TurtleTeleop(Node):
-    def __init__(self):
-        super().__init__('turtle_teleop')
-        self.publisher = self.create_publisher(Twist, 'turtle1/cmd_vel', 10)
-        self.timer = self.create_timer(0.1, self.timer_callback)
-        self.key = ''
-
-    def get_key(self):
-        # 논블로킹 키 입력
-        settings = termios.tcgetattr(sys.stdin)
-        tty.setraw(sys.stdin.fileno())
-        rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
-        key = sys.stdin.read(1) if rlist else ''
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-        return key
-
-    def timer_callback(self):
-        self.key = self.get_key()
-        msg = Twist()
-
-        if   self.key == 'w': msg.linear.x =  2.0
-        elif self.key == 's': msg.linear.x = -2.0
-        elif self.key == 'a': msg.angular.z =  2.0
-        elif self.key == 'd': msg.angular.z = -2.0
-
-        self.publisher.publish(msg)
-        self.get_logger().info(f'key: {self.key}')
-
-def main(args=None):
-    rp.init(args=args)
-    node = TurtleTeleop()
-    rp.spin(node)
-    node.destroy_node()
-    rp.shutdown()
-```
 
 **Step 3. `setup.py` entry_points 추가**
 
