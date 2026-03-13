@@ -142,13 +142,14 @@ def main():
         "<!-- AUTO-PROJECTS-END -->",
         projects_body
     )
-
+    print("STRUCTURE BODY:")
+    print(structure_body)
+    print("PROJECTS BODY:")
+    print(projects_body)
+    
     README_PATH.write_text(content, encoding="utf-8")
     print("README.md updated successfully.")
 
 if __name__ == "__main__":
     main()
-    print("STRUCTURE BODY:")
-    print(structure_body)
-    print("PROJECTS BODY:")
-    print(projects_body)
+
