@@ -35,6 +35,6 @@ ros2-project/
 
 | Project | Description | Status | Tags |
 |--------|-------------|-------|------|
-| [projectA](beginner/projectA) | ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A | 🟡 In Progress | ros2, beginner, pubsub |
+| [projectA](beginner/projectA) | ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A | 🟢 Completed | ros2, beginner, pubsub |
 
 <!-- AUTO-PROJECTS-END -->
