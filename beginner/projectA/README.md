@@ -1,5 +1,3 @@
-# ros2-project-1-beginner
-
 
 
 # 🟢 프로젝트 입문
