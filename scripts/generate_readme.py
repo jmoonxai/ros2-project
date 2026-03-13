@@ -1,155 +1,175 @@
+
+
 from pathlib import Path
-import re
 
 ROOT = Path(".")
 README_PATH = ROOT / "README.md"
 
-LEVEL_DIRS = ["beginner", "intermediate", "advanced", "projects"]
+LEVEL_DIRS = ["beginner", "intermediate", "advanced"]
 IGNORE_DIRS = {".git", ".github", "__pycache__", ".venv", "venv", "node_modules"}
 
-def build_tree(path: Path, prefix=""):
-    entries = sorted(
-        [p for p in path.iterdir() if p.name not in IGNORE_DIRS],
-        key=lambda x: (x.is_file(), x.name.lower())
-    )
-
-    lines = []
-    for i, entry in enumerate(entries):
-        connector = "└── " if i == len(entries) - 1 else "├── "
-        lines.append(prefix + connector + entry.name)
-        if entry.is_dir():
-            extension = "    " if i == len(entries) - 1 else "│   "
-            lines.extend(build_tree(entry, prefix + extension))
-    return lines
-
-def parse_simple_yaml(file_path: Path):
+def parse_simple_yaml(file_path):
     data = {}
     if not file_path.exists():
         return data
 
     current_key = None
-    for raw_line in file_path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.rstrip()
-        if not line or line.strip().startswith("#"):
+    for line in file_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+
+        if not line or line.startswith("#"):
             continue
 
-        if re.match(r"^[A-Za-z0-9_-]+:", line):
+        if ":" in line and not line.startswith("-"):
             key, value = line.split(":", 1)
             key = key.strip()
             value = value.strip()
+
             if value:
                 data[key] = value
                 current_key = None
             else:
                 data[key] = []
                 current_key = key
-        elif line.strip().startswith("- ") and current_key:
-            data[current_key].append(line.strip()[2:].strip())
+
+        elif line.startswith("-") and current_key:
+            data[current_key].append(line[1:].strip())
 
     return data
 
-def generate_structure_section():
+
+def format_status(status):
+    mapping = {
+        "planning": "⚪ Planning",
+        "in progress": "🟡 In Progress",
+        "done": "🟢 Completed"
+    }
+    return mapping.get(status.lower(), status)
+
+
+def generate_structure():
     lines = ["```text", "ros2-project/"]
+
     for level in LEVEL_DIRS:
         level_path = ROOT / level
-        if level_path.exists():
-            lines.append(f"├── {level}/" if level != LEVEL_DIRS[-1] else f"└── {level}/")
-            projects = sorted([p for p in level_path.iterdir() if p.is_dir() and p.name not in IGNORE_DIRS])
-            for idx, project in enumerate(projects):
-                is_last_level = (level == LEVEL_DIRS[-1])
-                is_last_project = (idx == len(projects) - 1)
-                if is_last_level:
-                    prefix = "    "
-                else:
-                    prefix = "│   "
-                branch = "└── " if is_last_project else "├── "
-                lines.append(f"{prefix}{branch}{project.name}/")
-        else:
-            lines.append(f"├── {level}/" if level != LEVEL_DIRS[-1] else f"└── {level}/")
+        if not level_path.exists():
+            continue
+
+        lines.append(f"└── {level}/")
+
+        projects = [p for p in level_path.iterdir() if p.is_dir()]
+
+        for project in projects:
+            lines.append(f"    └── {project.name}/")
+
     lines.append("```")
     return "\n".join(lines)
 
-def generate_projects_section():
+
+def generate_projects():
     lines = []
+
     for level in LEVEL_DIRS:
         level_path = ROOT / level
-        lines.append(f"### {level.capitalize()}")
         if not level_path.exists():
-            lines.append("- 아직 프로젝트가 없습니다.\n")
             continue
 
-        projects = sorted([p for p in level_path.iterdir() if p.is_dir() and p.name not in IGNORE_DIRS])
-
+        projects = [p for p in level_path.iterdir() if p.is_dir()]
         if not projects:
-            lines.append("- 아직 프로젝트가 없습니다.\n")
             continue
+
+        lines.append(f"### {level.capitalize()}")
+        lines.append("")
+        lines.append("| Project | Description | Status | Tags |")
+        lines.append("|--------|-------------|-------|------|")
 
         for project in projects:
             meta = parse_simple_yaml(project / "project.yaml")
 
-            lines.append(f"#### {project.name}")
-            title = meta.get("title", project.name)
-            description = meta.get("description", "설명이 아직 없습니다.")
-            status = meta.get("status", "unknown")
-            tags = meta.get("tags", [])
+            desc = meta.get("description", "")
+            status = format_status(meta.get("status", "planning"))
+            tags = ", ".join(meta.get("tags", []))
 
-            lines.append(f"- **Title**: {title}")
-            lines.append(f"- **Description**: {description}")
-            lines.append(f"- **Status**: {status}")
-            if tags:
-                lines.append(f"- **Tags**: {', '.join(tags)}")
-            lines.append("")
-    return "\n".join(lines).strip()
+            link = f"[{project.name}]({level}/{project.name})"
 
-def replace_section(content, start_marker, end_marker, new_body):
-    start = content.find(start_marker)
-    end = content.find(end_marker)
+            lines.append(
+                f"| {link} | {desc} | {status} | {tags} |"
+            )
 
-    if start == -1 or end == -1 or start > end:
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def generate_progress():
+    lines = []
+    lines.append("| Stage | Progress |")
+    lines.append("|------|---------|")
+
+    for level in LEVEL_DIRS:
+        level_path = ROOT / level
+
+        if not level_path.exists():
+            lines.append(f"| {level.capitalize()} | ⚪ 0 projects |")
+            continue
+
+        projects = [p for p in level_path.iterdir() if p.is_dir()]
+        count = len(projects)
+
+        if count == 0:
+            icon = "⚪"
+        else:
+            icon = "🟡"
+
+        lines.append(f"| {level.capitalize()} | {icon} {count} projects |")
+
+    return "\n".join(lines)
+
+
+def replace_section(content, start, end, body):
+    s = content.find(start)
+    e = content.find(end)
+
+    if s == -1 or e == -1:
         return content
 
-    start += len(start_marker)
-    return content[:start] + "\n" + new_body + "\n" + content[end:]
+    s += len(start)
+
+    return content[:s] + "\n" + body + "\n" + content[e:]
+
 
 def main():
-    if not README_PATH.exists():
-        README_PATH.write_text(
-            "# ROS2 Project\n\n"
-            "## Auto-generated Structure\n\n"
-            "<!-- AUTO-STRUCTURE-START -->\n"
-            "<!-- AUTO-STRUCTURE-END -->\n\n"
-            "## Auto-generated Project Summary\n\n"
-            "<!-- AUTO-PROJECTS-START -->\n"
-            "<!-- AUTO-PROJECTS-END -->\n",
-            encoding="utf-8"
-        )
 
     content = README_PATH.read_text(encoding="utf-8")
 
-    structure_body = generate_structure_section()
-    projects_body = generate_projects_section()
+    structure = generate_structure()
+    projects = generate_projects()
+    progress = generate_progress()
+
+    content = replace_section(
+        content,
+        "<!-- AUTO-PROGRESS-START -->",
+        "<!-- AUTO-PROGRESS-END -->",
+        progress
+    )
 
     content = replace_section(
         content,
         "<!-- AUTO-STRUCTURE-START -->",
         "<!-- AUTO-STRUCTURE-END -->",
-        structure_body
+        structure
     )
 
     content = replace_section(
         content,
         "<!-- AUTO-PROJECTS-START -->",
         "<!-- AUTO-PROJECTS-END -->",
-        projects_body
+        projects
     )
-    print("STRUCTURE BODY:")
-    print(structure_body)
-    print("PROJECTS BODY:")
-    print(projects_body)
-    
+
     README_PATH.write_text(content, encoding="utf-8")
-    print("README.md updated successfully.")
+    print("README updated")
+
 
 if __name__ == "__main__":
     main()
-
