@@ -57,7 +57,7 @@ def generate_structure():
 
         lines.append(f"└── {level}/")
 
-        projects = [p for p in level_path.iterdir() if p.is_dir()]
+        projects = sorted([p for p in level_path.iterdir() if p.is_dir()])
 
         for project in projects:
             lines.append(f"    └── {project.name}/")
@@ -74,7 +74,7 @@ def generate_projects():
         if not level_path.exists():
             continue
 
-        projects = [p for p in level_path.iterdir() if p.is_dir()]
+        projects = sorted([p for p in level_path.iterdir() if p.is_dir()])
         if not projects:
             continue
 
@@ -113,7 +113,7 @@ def generate_progress():
             lines.append(f"| {level.capitalize()} | ⚪ 0 projects |")
             continue
 
-        projects = [p for p in level_path.iterdir() if p.is_dir()]
+        projects = sorted([p for p in level_path.iterdir() if p.is_dir()])
         count = len(projects)
 
         if count == 0:
