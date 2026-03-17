@@ -1,5 +1,5 @@
 title: ROS2 Publisher/Subscriber Practice
-description: `turtle1/pose`를 구독해 x, y, 각도를 시간과 함께 CSV 파일로 저장한다. 나중에 matplotlib으로 이동 경로를 시각화할 수 있다.
+description: `키보드 입력(`w a s d`)을 받아 `cmd_vel` 토픽을 발행하고 turtlesim 거북이를 실시간으로 조종한다.
 tags:
   - ros2
   - beginner
