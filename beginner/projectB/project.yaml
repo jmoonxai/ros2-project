@@ -1,0 +1,7 @@
+title: ROS2 Publisher/Subscriber Practice
+description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+tags:
+  - ros2
+  - beginner
+  - pubsub
+status: in progress
