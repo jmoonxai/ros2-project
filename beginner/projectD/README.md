@@ -1,74 +1,93 @@
-# ros2-project-1-beginner
+
+## 🐢 Project 2 — 거북이 대형 변경 서비스
 
 
+> 프로젝트 개요
+> 서비스로 대형 이름(`circle` / `triangle` / `grid`)과 마릿수를 요청하면 해당 모양으로 거북이들을 배치하는 시스템을 구현한다.
+> 멀티 스폰 코드의 `calc_position()`을 대형별로 확장하는 프로젝트로, 수식 변경만으로 다양한 형태를 만들 수 있다.
 
-# 🟢 프로젝트 입문
+---
 
-> 목표
-> 섹션 1에서 배운 Publisher / Subscriber 패턴을 각각 독립 프로젝트로 완성한다.
-> 새로운 개념 없이 배운 것만으로 끝낼 수 있는 프로젝트 2개.
+## 🎯 목표
 
+- [ ] 커스텀 서비스 정의 — 대형 이름 + 마릿수를 Request로 받기
+- [ ] `circle`, `triangle`, `grid` 대형 좌표 계산 함수 구현
+- [ ] 서비스 서버에서 대형에 따라 다른 함수 호출
+- [ ] Jupyter에서 각 대형 시각화 검증 후 ROS2 이식
 
+---
 
+## 📐 시스템 설계
 
+**서비스 정의 — FormationSpawn.srv**
 
-## 프로젝트 A — 거북이 키보드 조종기
-
-**▸ 한 줄 설명**
-
-키보드 입력(`w a s d`)을 받아 `cmd_vel` 토픽을 발행하고 turtlesim 거북이를 실시간으로 조종한다.
-
-
-
-
-
-**▸ 핵심 학습 포인트**
-
-- `create_publisher()` + `create_timer()` 패턴 복습
-- Python `input()` 또는 `sys.stdin`으로 키 입력 처리
-- `Twist` 메시지의 `linear.x` / `angular.z` 필드 제어
-
-
-
-
-
-**▸ 구현 단계**
-
-**Step 1. 키 입력 → Twist 변환 로직 설계**
-
-| 키 | linear.x | angular.z | 동작 |
-|----|----------|-----------|------|
-| `w` | 2.0 | 0.0 | 앞으로 |
-| `s` | -2.0 | 0.0 | 뒤로 |
-| `a` | 0.0 | 2.0 | 좌회전 |
-| `d` | 0.0 | -2.0 | 우회전 |
-| 그 외 | 0.0 | 0.0 | 정지 |
-
-
-
-
-**Step 2. 노드 코드 작성**
-
-
-
-
-**Step 3. `setup.py` entry_points 추가**
-
-```python
-'turtle_teleop = my_first_package.turtle_teleop:main',
+```text
+# srv/FormationSpawn.srv
+string formation   # "circle" / "triangle" / "grid"
+int64 num          # 마릿수
+float64 scale      # 전체 크기 (반지름 or 간격)
+---
+float64[] x
+float64[] y
+float64[] theta
+string result      # "success" / "unknown formation"
 ```
 
+**데이터 흐름**
+
+```
+ros2 service call /formation_spawn ...
+        │
+        ▼
+[formation_server_node]
+        │
+  formation 이름 분기
+  ├── "circle"   → calc_circle()
+  ├── "triangle" → calc_triangle()
+  └── "grid"     → calc_grid()
+        │
+        ▼
+  /spawn 서비스 반복 호출 (turtlesim)
+```
+
+---
+
+## 🏗️ 구현 단계
+
+**▸ Step 1 — 서비스 정의 파일 추가**
+
+`my_first_package_msgs/srv/FormationSpawn.srv` 생성 후 `CMakeLists.txt`에 등록.
+
+```cmake
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/CmdPose.msg"
+  "srv/MultiSpawn.srv"
+  "srv/FormationSpawn.srv"   # 추가
+)
+```
+
+---
+
+**▸ Step 2 — 대형별 좌표 계산 함수 (Jupyter 검증 먼저)**
 
 
-**Step 4. 빌드 & 실행**
+**▸ Step 3 — 서비스 서버 노드**
 
-```bash
-cd ~/ros2_study
-colcon build
-ros2_study
 
-# 터미널 1
-ros2 run turtlesim turtlesim_node
+**▸ Step 4 — 실행**
 
-# 터미널 2
-ros2 run my_first_package turtle_teleop
+---
+
+## 🔧 개선 아이디어
+
+- **대형 추가**: `line`(직선), `star`(별), `spiral`(나선) 등 수식만 추가하면 확장 가능
+- **TeleportAbsolute 활용**: Spawn 대신 기존 거북이를 이동시키는 버전으로 변경
+- **대형 전환 서비스**: 이미 배치된 거북이들을 다른 대형으로 재배치
+
+---
+
+## ✅ 완성 기준
+
+- `circle`, `triangle`, `grid` 세 가지 대형이 모두 정상 동작한다
+- 알 수 없는 대형 이름 요청 시 `"unknown formation"`을 응답한다
+- Jupyter에서 각 대형의 좌표를 시각화로 검증한 결과가 있다
