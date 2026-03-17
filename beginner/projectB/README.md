@@ -38,46 +38,7 @@ timestamp, x, y, theta, linear_velocity, angular_velocity
 
 **Step 2. 노드 코드 작성**
 
-```python
-import rclpy as rp
-from rclpy.node import Node
-from turtlesim.msg import Pose
-import csv, os
 
-class TurtleLogger(Node):
-    def __init__(self):
-        super().__init__('turtle_logger')
-        self.subscription = self.create_subscription(
-            Pose, 'turtle1/pose', self.callback, 10
-        )
-        # CSV 파일 초기화
-        self.file_path = os.path.expanduser('~/ros2_study/turtle_log.csv')
-        with open(self.file_path, 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(['timestamp', 'x', 'y', 'theta',
-                             'linear_vel', 'angular_vel'])
-        self.get_logger().info(f'로그 저장 시작: {self.file_path}')
-
-    def callback(self, msg):
-        timestamp = self.get_clock().now().nanoseconds
-        with open(self.file_path, 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                timestamp,
-                round(msg.x, 4),
-                round(msg.y, 4),
-                round(msg.theta, 4),
-                round(msg.linear_velocity, 4),
-                round(msg.angular_velocity, 4)
-            ])
-
-def main(args=None):
-    rp.init(args=args)
-    node = TurtleLogger()
-    rp.spin(node)
-    node.destroy_node()
-    rp.shutdown()
-```
 
 **Step 3. `setup.py` entry_points 추가**
 
