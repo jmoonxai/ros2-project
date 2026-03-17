@@ -81,3 +81,6 @@
 - 거북이가 벽에 부딪히지 않고 계속 움직인다
 - `rqt_graph`에서 `pose` 구독 + `cmd_vel` 발행 구조가 보인다
 - `ros2 topic echo /turtle1/cmd_vel`로 제어 명령이 출력된다
+
+- <img width="1029" height="263" alt="image" src="https://github.com/user-attachments/assets/d555c4ab-3753-44f5-81c6-08c491a5b8db" />
+
