@@ -36,7 +36,7 @@ ros2-project/
 
 | Project | Description | Status | Tags |
 |--------|-------------|-------|------|
-| [projectA](beginner/projectA) | `turtle1/pose`를 구독해 x, y, 각도를 시간과 함께 CSV 파일로 저장한다. 나중에 matplotlib으로 이동 경로를 시각화할 수 있다. | 🟢 Completed | ros2, beginner, pubsub |
+| [projectA](beginner/projectA) | `키보드 입력(`w a s d`)을 받아 `cmd_vel` 토픽을 발행하고 turtlesim 거북이를 실시간으로 조종한다. | 🟢 Completed | ros2, beginner, pubsub |
 | [projectB](beginner/projectB) | ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A | 🟢 Completed | ros2, beginner, pubsub |
 
 <!-- AUTO-PROJECTS-END -->
