@@ -1,5 +1,5 @@
 title: ROS2 Publisher/Subscriber Practice
-description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+description: 프로젝트 개요 pose 토픽으로 거북이의 현재 위치를 실시간으로 감지하고, 벽에 가까워지면 자동으로 방향을 전환하는 노드를 구현한다. "센서 → 판단 → 제어" 루프를 처음으로 직접 구현하는 프로젝트로, 자율주행 로봇 제어의 가장 기본 형태다.
 tags:
   - ros2
   - beginner
