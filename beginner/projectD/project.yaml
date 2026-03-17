@@ -1,5 +1,5 @@
-title: ROS2 Publisher/Subscriber Practice
-description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+title: ROS2 Service Practice
+description: 서비스로 대형 이름(`circle` / `triangle` / `grid`)과 마릿수를 요청하면 해당 모양으로 거북이들을 배치하는 시스템을 구현한다. 멀티 스폰 코드의 `calc_position()`을 대형별로 확장하는 프로젝트로, 수식 변경만으로 다양한 형태를 만들 수 있다.
 tags:
   - ros2
   - beginner
