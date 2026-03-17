@@ -1,86 +1,74 @@
-
-<br>
-
-# 🐢 Project — 거북이 자동 회피 시스템
-
->  프로젝트 개요
-> `pose` 토픽으로 거북이의 현재 위치를 실시간으로 감지하고, 벽에 가까워지면 자동으로 방향을 전환하는 노드를 구현한다.
-> "센서 → 판단 → 제어" 루프를 처음으로 직접 구현하는 프로젝트로, 자율주행 로봇 제어의 가장 기본 형태다.
+# ros2-project-1-beginner
 
 
-<br>
 
-## 🎯 목표
+# 🟢 프로젝트 입문
 
-- [ ] `pose` 토픽을 구독해 거북이 위치를 실시간으로 읽기
-- [ ] 벽(경계) 근접 여부를 판단하는 로직 구현
-- [ ] `cmd_vel` 토픽 발행으로 거북이 방향 전환
-- [ ] 타이머 기반 주기 제어 루프 구성
+> 목표
+> 섹션 1에서 배운 Publisher / Subscriber 패턴을 각각 독립 프로젝트로 완성한다.
+> 새로운 개념 없이 배운 것만으로 끝낼 수 있는 프로젝트 2개.
 
-<br>
 
-## 📐 시스템 설계
 
-**데이터 흐름**
 
-```
-[turtlesim] ──/turtle1/pose──▶ [wall_avoid_node]
-                                      │
-                              위치 판단 (x, y 경계 체크)
-                                      │
-                               ──/turtle1/cmd_vel──▶ [turtlesim]
-```
 
-<br>
-**turtlesim 판 경계값**
+## 프로젝트 A — 거북이 키보드 조종기
 
-| 경계 | 좌표값 |
-|------|--------|
-| 최솟값 (좌/하) | 약 0.5 |
-| 최댓값 (우/상) | 약 10.5 |
-| 안전 마진 | 1.0 권장 |
+**▸ 한 줄 설명**
 
-<br>
+키보드 입력(`w a s d`)을 받아 `cmd_vel` 토픽을 발행하고 turtlesim 거북이를 실시간으로 조종한다.
 
-## 🏗️ 구현 단계
 
-**▸ Step 1 — 패키지 및 파일 준비**
-기존 `my_first_package`에 `wall_avoid.py` 파일을 추가하고 `setup.py`에 엔트리포인트를 등록한다.
+
+
+
+**▸ 핵심 학습 포인트**
+
+- `create_publisher()` + `create_timer()` 패턴 복습
+- Python `input()` 또는 `sys.stdin`으로 키 입력 처리
+- `Twist` 메시지의 `linear.x` / `angular.z` 필드 제어
+
+
+
+
+
+**▸ 구현 단계**
+
+**Step 1. 키 입력 → Twist 변환 로직 설계**
+
+| 키 | linear.x | angular.z | 동작 |
+|----|----------|-----------|------|
+| `w` | 2.0 | 0.0 | 앞으로 |
+| `s` | -2.0 | 0.0 | 뒤로 |
+| `a` | 0.0 | 2.0 | 좌회전 |
+| `d` | 0.0 | -2.0 | 우회전 |
+| 그 외 | 0.0 | 0.0 | 정지 |
+
+
+
+
+**Step 2. 노드 코드 작성**
+
+
+
+
+**Step 3. `setup.py` entry_points 추가**
 
 ```python
-# setup.py entry_points에 추가
-'wall_avoid = my_first_package.wall_avoid:main',
+'turtle_teleop = my_first_package.turtle_teleop:main',
 ```
 
 
-**▸ Step 2 — 노드 기본 구조**
-`pose` 구독 + `cmd_vel` 발행 + 타이머로 구성한다.
 
+**Step 4. 빌드 & 실행**
 
+```bash
+cd ~/ros2_study
+colcon build
+ros2_study
 
-**▸ Step 3 — 판단 및 제어 로직**
-타이머 콜백에서 위치를 확인하고 `Twist` 메시지로 제어 명령을 발행한다.
+# 터미널 1
+ros2 run turtlesim turtlesim_node
 
-
-**▸ Step 4 — 빌드 및 실행**
-
-
-
-<br>
-
-## 🔧 개선 아이디어
-
-기본 구현이 완성되면 아래를 시도해본다.
-
-- **방향 판단 개선**: 어느 벽에 가까운지에 따라 회전 방향을 다르게 설정 (왼쪽 벽 → 오른쪽으로 회전)
-- **커스텀 메시지 추가**: 현재 상태(`normal` / `avoiding`)를 커스텀 메시지로 발행해 모니터링
-- **속도 조절**: 벽과의 거리에 비례해 속도를 줄이는 로직 (비례 제어 기초)
-<br>
-## ✅ 완성 기준
-
-- 거북이가 벽에 부딪히지 않고 계속 움직인다
-- `rqt_graph`에서 `pose` 구독 + `cmd_vel` 발행 구조가 보인다
-- `ros2 topic echo /turtle1/cmd_vel`로 제어 명령이 출력된다
-
-- <img width="1029" height="263" alt="image" src="https://github.com/user-attachments/assets/d555c4ab-3753-44f5-81c6-08c491a5b8db" />
-
+# 터미널 2
+ros2 run my_first_package turtle_teleop
