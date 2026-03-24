@@ -1,5 +1,5 @@
 
-# 🤖 Project 03-중 — Python Action Client로 순차 다중 이동
+# 🤖 Project — Python Action Client로 순차 다중 이동
 
 ## 프로젝트 목표
 
@@ -14,7 +14,7 @@
 - 각 Goal 완료 시 Result(최종 위치, 총 이동 거리) 출력
 - 3개 Goal 모두 완료 후 노드 자동 종료
 
----
+--
 
 ## 사전 준비 체크리스트
 
@@ -22,7 +22,7 @@
 - [ ] `ActionServer` 코드 구조 완전 이해
 - [ ] `rclpy.action` 모듈 문서 한 번 훑기
 
----
+--
 
 ## Action Client 개념 이해
 
@@ -59,7 +59,7 @@ GOALS = [
 ]
 ```
 
----
+--
 
 ## Step 2 — Action Client 클래스 기본 구조
 
@@ -107,7 +107,7 @@ ros2 run my_first_pkg dist_turtle_action_client
 [INFO] ✅ 모든 Goal 완료!
 ```
 
----
+--
 
 ## 완성 확인 체크리스트
 
