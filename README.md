@@ -49,6 +49,6 @@ ros2-project/
 | [projectE](beginner/projectE) | 기존 DistTurtleServer를 확장해서, Goal에 return_home: true를 포함시키면 이동 완료 후 거북이가 출발 위치로 자동 복귀하도록 만든다. | 🟢 Completed | ros2, beginner, pubsub |
 | [projectF](beginner/projectF) | 터미널 명령(ros2 action send_goal) 없이 Python 코드로 Action Client 노드를 작성한다. 3개의 Goal을 이전 Goal이 완료된 후 순서대로 전송하고, 각 단계의 Feedback과 최종 Result를 터미널에 출력한다. | 🟢 Completed | ros2, beginner, pubsub |
 | [projectG](beginner/projectG) | R터미널에서 `ros2 param set`을 손으로 치는 대신, Python 스크립트 하나가 3가지 색상을 3초 간격으로 자동 순환시킨다. 파라미터 CLI 명령어의 동작 방식을 코드로 자동화하는 연습이다. | 🟢 Completed | ros2, beginner, pubsub |
-| [projectH](beginner/projectH) | 파라미터를 선언하고 변수로 가져오는 패턴을 익힌다. | 🟢 Completed | ros2, beginner, pubsub |
+| [projectH](beginner/projectH) | 파라미터로 동작이 바뀌는 주기 퍼블리셔 노드 | 🟢 Completed | ros2, beginner, pubsub |
 
 <!-- AUTO-PROJECTS-END -->
