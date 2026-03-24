@@ -1,7 +1,9 @@
-title: ROS2 Publisher/Subscriber Practice
-description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+title: ROS2 Parameters Practice
+description: 파라미터를 선언하고 변수로 가져오는 패턴을 익힌다.
+- 파라미터 콜백에서 `self` 변수를 업데이트하는 구조를 직접 구현한다.
+- `ros2 topic echo`로 변경 전후 메시지를 비교해 콜백이 정상 동작하는지 검증한다.
 tags:
   - ros2
   - beginner
   - pubsub
-status: in progress
+status: done
