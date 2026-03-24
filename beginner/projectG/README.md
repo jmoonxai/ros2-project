@@ -1,74 +1,38 @@
-# ros2-project-1-beginner
+# 🟢 ROS2 파라미터 실습 프로젝트 
+
+## 프로젝트 개요
+
+**turtlesim 배경 색상 자동 순환 스크립트**
+
+터미널에서 `ros2 param set`을 손으로 치는 대신, Python 스크립트 하나가 3가지 색상을 3초 간격으로 자동 순환시킨다. 파라미터 CLI 명령어의 동작 방식을 코드로 자동화하는 연습이다.
 
 
 
-# 🟢 프로젝트 입문
+## 목표
 
-> 목표
-> 섹션 1에서 배운 Publisher / Subscriber 패턴을 각각 독립 프로젝트로 완성한다.
-> 새로운 개념 없이 배운 것만으로 끝낼 수 있는 프로젝트 2개.
-
-
+- `ros2 param set`의 동작을 Python에서 재현한다.
+- turtlesim 노드가 실행 중인 상태에서 외부 스크립트로 파라미터를 제어한다.
+- 스크립트를 종료해도 turtlesim은 영향받지 않는다.
 
 
 
-## 프로젝트 A — 거북이 키보드 조종기
+## 요구사항
 
-**▸ 한 줄 설명**
+- turtlesim 노드(`ros2 run turtlesim turtlesim_node`)가 실행 중임을 가정한다.
+- `subprocess`로 `ros2 param set` 명령을 호출하거나, `rclpy` 파라미터 클라이언트를 사용해도 된다.
+- 3초 간격으로 아래 색상을 무한 순환한다.
 
-키보드 입력(`w a s d`)을 받아 `cmd_vel` 토픽을 발행하고 turtlesim 거북이를 실시간으로 조종한다.
-
-
-
-
-
-**▸ 핵심 학습 포인트**
-
-- `create_publisher()` + `create_timer()` 패턴 복습
-- Python `input()` 또는 `sys.stdin`으로 키 입력 처리
-- `Twist` 메시지의 `linear.x` / `angular.z` 필드 제어
-
-
-
-
-
-**▸ 구현 단계**
-
-**Step 1. 키 입력 → Twist 변환 로직 설계**
-
-| 키 | linear.x | angular.z | 동작 |
-|----|----------|-----------|------|
-| `w` | 2.0 | 0.0 | 앞으로 |
-| `s` | -2.0 | 0.0 | 뒤로 |
-| `a` | 0.0 | 2.0 | 좌회전 |
-| `d` | 0.0 | -2.0 | 우회전 |
-| 그 외 | 0.0 | 0.0 | 정지 |
+| 순서 | 배경 색상 | R | G | B |
+|---|---|---|---|---|
+| 1 | 파랑 (기본) | 69 | 86 | 255 |
+| 2 | 초록 | 69 | 200 | 69 |
+| 3 | 핑크 | 200 | 100 | 200 |
 
 
 
 
-**Step 2. 노드 코드 작성**
+## 확인 기준
 
-
-
-
-**Step 3. `setup.py` entry_points 추가**
-
-```python
-'turtle_teleop = my_first_package.turtle_teleop:main',
-```
-
-
-
-**Step 4. 빌드 & 실행**
-
-```bash
-cd ~/ros2_study
-colcon build
-ros2_study
-
-# 터미널 1
-ros2 run turtlesim turtlesim_node
-
-# 터미널 2
-ros2 run my_first_package turtle_teleop
+- [ ] 스크립트 실행 후 turtlesim 창 배경이 3초마다 색이 바뀐다.
+- [ ] 3가지 색이 순서대로 반복된다.
+- [ ] Ctrl+C로 스크립트를 종료해도 turtlesim은 계속 실행된다.
