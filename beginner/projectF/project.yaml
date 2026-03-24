@@ -1,7 +1,7 @@
-title: ROS2 Publisher/Subscriber Practice
-description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+title: ROS2 Action Client Practice
+description: 터미널 명령(ros2 action send_goal) 없이 Python 코드로 Action Client 노드를 작성한다. 3개의 Goal을 이전 Goal이 완료된 후 순서대로 전송하고, 각 단계의 Feedback과 최종 Result를 터미널에 출력한다.
 tags:
   - ros2
   - beginner
   - pubsub
-status: in progress
+status: done
