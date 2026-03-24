@@ -1,7 +1,8 @@
-title: ROS2 Publisher/Subscriber Practice
-description: ROS2의 퍼블리셔와 서브스크라이버 통신 구조를 연습하는 입문 프로젝트 A
+title: ROS2 Parameter Practice
+description: R터미널에서 `ros2 param set`을 손으로 치는 대신, Python 스크립트 하나가 3가지 색상을 3초 간격으로 자동 순환시킨다. 파라미터 CLI 명령어의 동작 방식을 코드로 자동화하는 연습이다.
+
 tags:
   - ros2
   - beginner
   - pubsub
-status: in progress
+status: done
