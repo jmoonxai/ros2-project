@@ -75,6 +75,26 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 
 **▸ Step 4 — 실행**
+```bash
+
+
+# 터미널 1
+ros2 run turtlesim turtlesim_node
+# 터미널 2
+ros2 run my_first_package formation_server
+
+# 원형 8마리
+ros2 service call /formation_spawn \
+  my_first_package_msgs/srv/FormationSpawn \
+  "{formation: 'circle', num: 8, scale: 3.0}"
+
+# 격자 9마리
+ros2 service call /formation_spawn \
+  my_first_package_msgs/srv/FormationSpawn \
+  "{formation: 'grid', num: 9, scale: 2.0}"
+
+```
+
 
 ---
 
